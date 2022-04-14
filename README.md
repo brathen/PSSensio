@@ -1,4 +1,4 @@
-
+Text cleanup coming...
 
 # Build (cd to root)
 docker build .
