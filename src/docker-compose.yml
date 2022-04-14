@@ -1,0 +1,30 @@
+version: "3.7"
+services:
+
+# PSSensio
+##################################################################################################
+  PSSensio:
+    image: mcr.microsoft.com/powershell:latest 
+    container_name: PSSensio
+    hostname: PSSensio
+    volumes:
+      - '/docker/PSSensio/config:/config'
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Europe/Oslo
+    entrypoint: sh /config/startup.sh
+    networks:
+      MACVLAN:
+        # Listning on port 80
+        ipv4_address: 192.168.3.194
+    restart: unless-stopped
+
+
+# ================================================================================================
+# docker-compose - Network Settings
+##################################################################################################
+networks:
+  MACVLAN:
+    external: true
+# ================================================================================================
