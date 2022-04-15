@@ -18,20 +18,21 @@ services:
 
 # # PSSensio
 # # ---------------------------------------------
-#   PSSensio:
 #     image: 5vein/pssensio
 #     container_name: PSSensio
 #     hostname: PSSensio
 #     environment:
 #       - TZ=Europe/Oslo
-#     ports:
-#       - "80:80"
 #     networks:
 #       MACVLAN:
 #         # Listning on port 80
 #         ipv4_address: 192.168.3.194
 #     restart: unless-stopped
-
+#     healthcheck:
+#       test: curl --fail -s http://192.168.3.194:80/ || exit 1
+#       interval: 1m30s
+#       timeout: 10s
+#       retries: 3
 
 # # ===============================================
 # # docker-compose - Network Settings
