@@ -1,71 +1,50 @@
-Text cleanup coming...
-
-# Build (cd to root)
-docker build .
-
-# Build with Tag (cd to root)
-docker build -t pssensio .
-
-# List Images
-docker images
-
-# Run with image id
-docker run -d -p 80:80 9b089f59fd96
-
-# remove image
-docker rmi
+# PSSensio - Sensio WebAPI in PowerShell
 
 
-<#
-##########################################################################################################################################
-##########################################################################################################################################
-# COMMAND HELP:
-
-    $RemoteHost = "192.168.3.162"
-    $ID = "D_DownlightsStue"
+This works as a simple weblistner for running commands to control lights in Sensio Controller.
+By using Homebridge plugin; homebridge-http it will integrates with Apple Home Kit.
+PSSensio is listening on TCP Port 80 (http) by default, and have preloaded PowerShell functions to control Sensio Controller. PSSensio will accept common PowerShell commands as well, if that please.
 
 
-    # Getting the current state
-    Get-Sensio -RemoteHost $RemoteHost -ID "$ID"
-    Write-Host "`nCurrent State for ID: `"$ID`" is: $CurrentState" -ForegroundColor green
+PSSensio is preloaded with four functions:
+* Set-Sensio (Set value of dimmer switch)
+* Get-Sensio (Get value of dimmer switch)
+* Set-SensioRele (Set value of rele switch)
+* Get-SensioRele (Get value of rele switch)
+
+## Command examples:
+
+#### Get/Set-Sensio
+	
+    http://<IP-Adr.-RunningPSSensio>/?command=Set-Sensio -RemoteHost <IP-Adr.-SENSIOCONTROLLER> -ID D_DownlightsLightSwitch -Power 100
+    http://<IP-Adr.-RunningPSSensio>/?command=Set-Sensio -RemoteHost <IP-Adr.-SENSIOCONTROLLER> -ID D_DownlightsLightSwitch -Power 0
+    http://<IP-Adr.-RunningPSSensio>/?command=Get-Sensio -RemoteHost <IP-Adr.-SENSIOCONTROLLER> -ID D_DownlightsLightSwitch
+
+#### Get/Set-SensioRelse
+
+    http://<IP-Adr.-RunningPSSensio>/?command=Set-SensioRele -RemoteHost <IP-Adr.-SENSIOCONTROLLER> -ID B_R_ReleLight -Power ON
+    http://<IP-Adr.-RunningPSSensio>/?command=Set-SensioRele -RemoteHost <IP-Adr.-SENSIOCONTROLLER> -ID B_R_ReleLight -Power OFF
+    http://<IP-Adr.-RunningPSSensio>/?command=Get-SensioRele
     
-    # Flashing the lights...
-    Set-Sensio -RemoteHost $RemoteHost -ID "$ID" -Power 0
-    Sleep -Seconds 1
-    Set-Sensio -RemoteHost $RemoteHost -ID "$ID" -Power 100
-    Sleep -Seconds 1
-    Set-Sensio -RemoteHost $RemoteHost -ID "$ID" -Power $CurrentState
+
+!!! Do not expose PSSensio port directly out on the internet (internal use only) !!! 
 
 
-    URL WEB TEST:
-    http://localhost/?command=ipconfig
-    http://192.168.3.8/?command=Set-Sensio -RemoteHost 192.168.3.162 -ID D_DownlightsStue -Power 100
-    http://192.168.3.8/?command=Get-Sensio -RemoteHost 192.168.3.162 -ID D_DownlightsStue
+## Build & Run Container:
+Download the reopo and run the following command, else get it from here: https://hub.docker.com/r/5vein/pssensio
 
+CD to root:
 
+	docker build .
 
-	"on_url": "http://192.168.3.50:2222/?command=Set-Sensio -RemoteHost 192.168.3.150 -ID D_DownlightsGang -Power 100",
-	"off_url": "http://192.168.3.50:2222/?command=Set-Sensio -RemoteHost 192.168.3.150 -ID D_DownlightsGang -Power 0",
-	"status_url": "http://192.168.3.50:2222/?command=Get-Sensio -RemoteHost 192.168.3.150 -ID D_DownlightsGang",
-	
-http://192.168.3.50:2222//?command=Set-Sensio -RemoteHost 192.168.3.150 -ID D_DownlightsGang -Power 100
-http://192.168.3.50:2222//?command=Set-Sensio -RemoteHost 192.168.3.150 -ID D_DownlightsGang -Power 40
-http://192.168.3.50:2222//?command=Set-Sensio -RemoteHost 192.168.3.150 -ID D_DownlightsGang -Power 10
-http://192.168.3.50:2222//?command=Get-Sensio -RemoteHost 192.168.3.150 -ID D_DownlightsGang
+Build docker image:
 
+	docker build -t pssensio .
 
-	"off_url": "http://192.168.3.50:2222//?command=Set-Sensio -RemoteHost 192.168.3.150 -ID D_DownlightsGang -Power 0",
-	"status_url": "http://192.168.3.50:2222//?command=Get-Sensio -RemoteHost 192.168.3.150 -ID D_DownlightsGang",
+Get the image id: 
 
-	
-	
-http://192.168.3.50:2222/
+	docker images
 
-    Command Web Test
-    Set-Sensio -RemoteHost 192.168.3.162 -ID D_DownlightsStue -Power 100
-    Get-Sensio -RemoteHost 192.168.3.162 -ID D_DownlightsStue
+Run image by id:
 
-##########################################################################################################################################
-##########################################################################################################################################
-#>
-
+	docker run -d -p 80:80 <ID from above command>
